@@ -2,6 +2,8 @@ from django.contrib import messages
 from django.shortcuts import render
 from job_application.forms import ApplicationForm
 from .models import Form
+from django.core.mail import EmailMessage
+
 
 def index(request):
     if request.method == "POST": # If the user presses submit button
@@ -14,8 +16,16 @@ def index(request):
             occupation = form.cleaned_data["occupation"]
             Form.objects.create(first_name=first_name, last_name=last_name, email=email,
                                 date=date, occupation=occupation)
+
+            # Email the submitter, comment out after updating settings.py with email settings
+            # message_body = f"A new job application was submitted. Thank you, {first_name}"
+            # email_message = EmailMessage("Form submission confirmation", message_body, to=[email])
+            # email_message.send()
+
             messages.success(request, "Form submitted successfully.")
 
     return render(request, "index.html")
 
 
+def about(request):
+    return render(request, "about.html")
